@@ -54,14 +54,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="game\CameraController.cs" />
+    <Compile Include="game\simulation\Machine.cs" />
+    <Compile Include="game\simulation\World.cs" />
     <Compile Include="helpers\ActionNames.cs" />
+    <Compile Include="helpers\MathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\default_env.tres" />
     <Content Include="assets\icon.png" />
     <Content Include="assets\icon.png.import" />
-    <Content Include="game\game.tscn" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

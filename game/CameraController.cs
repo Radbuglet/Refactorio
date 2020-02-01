@@ -12,7 +12,7 @@ namespace Refactorio.game
             if (Input.IsActionPressed(ActionNames.MoveCameraRightAction)) direction.x += 1;
             if (Input.IsActionPressed(ActionNames.MoveCameraUpAction)) direction.z += -1;
             if (Input.IsActionPressed(ActionNames.MoveCameraDownAction)) direction.z += 1;
-            Translate(direction * delta * 20); 
+            Translation += direction * delta * 10;
         }
     }
 }

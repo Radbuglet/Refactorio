@@ -11,10 +11,14 @@
       </e>
       <e p="game" t="Include">
         <e p="CameraController.cs" t="Include" />
-        <e p="game.tscn" t="Include" />
+        <e p="simulation" t="Include">
+          <e p="Machine.cs" t="Include" />
+          <e p="World.cs" t="Include" />
+        </e>
       </e>
       <e p="helpers" t="Include">
         <e p="ActionNames.cs" t="Include" />
+        <e p="MathUtils.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="Properties" t="Include">

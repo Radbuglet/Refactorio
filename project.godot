@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="Refactorio"
 run/main_scene="res://game/Game.tscn"
-config/icon="res://assets/icon.png"
+config/icon="res://assets/textures/icon.png"
 
 [input]
 
@@ -49,4 +49,4 @@ cam_right={
 
 [rendering]
 
-environment/default_environment="res://assets/default_env.tres"
+environment/default_environment="res://assets/environments/default_env.tres"
