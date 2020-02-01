@@ -1,18 +1,25 @@
 using Godot;
-using Refactorio.helpers;
 
 namespace Refactorio.game
 {
     public class CameraController : Camera
     {
+        private bool _isDragging;
+
         public override void _Process(float delta)
         {
-            var direction = new Vector3();
-            if (Input.IsActionPressed(ActionNames.MoveCameraLeftAction)) direction.x += -1;
-            if (Input.IsActionPressed(ActionNames.MoveCameraRightAction)) direction.x += 1;
-            if (Input.IsActionPressed(ActionNames.MoveCameraUpAction)) direction.z += -1;
-            if (Input.IsActionPressed(ActionNames.MoveCameraDownAction)) direction.z += 1;
-            Translation += direction * delta * 10;
+            var isMouseDown = Input.IsMouseButtonPressed(2);
+            if (isMouseDown == _isDragging) return;
+            Input.SetMouseMode(isMouseDown ? Input.MouseMode.Captured : Input.MouseMode.Visible);
+            _isDragging = isMouseDown;
+        }
+
+        public override void _Input(InputEvent @event)
+        {
+            if (!(@event is InputEventMouseMotion eventMotion) || !_isDragging) return;
+            var relative = eventMotion.Relative;
+            
+            Translation += new Vector3(relative.x, 0, relative.y) * -0.1f;
         }
     }
 }
