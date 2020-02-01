@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p=".mono/temp/bin" t="ExcludeRecursive" />
+      <e p=".mono/temp/obj" t="ExcludeRecursive" />
+      <e p="assets" t="Include">
+        <e p="default_env.tres" t="Include" />
+        <e p="icon.png" t="Include" />
+        <e p="icon.png.import" t="Include" />
+      </e>
+      <e p="game" t="Include">
+        <e p="CameraController.cs" t="Include" />
+        <e p="game.tscn" t="Include" />
+      </e>
+      <e p="helpers" t="Include">
+        <e p="ActionNames.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Properties" t="Include">
+        <e p="AssemblyInfo.cs" t="Include" />
+      </e>
+      <e p="Refactorio.csproj" t="IncludeRecursive" />
+      <e p="Refactorio.sln" t="IncludeFlat" />
+    </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_Refactorio.1487548025.00" t="ExcludeRecursive" />
+  </component>
+</project>
