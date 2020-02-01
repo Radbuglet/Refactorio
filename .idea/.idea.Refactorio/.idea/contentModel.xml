@@ -11,6 +11,9 @@
       </e>
       <e p="game" t="Include">
         <e p="CameraController.cs" t="Include" />
+        <e p="scripting" t="Include">
+          <e p="Runtime.cs" t="Include" />
+        </e>
         <e p="simulation" t="Include">
           <e p="Machine.cs" t="Include" />
           <e p="World.cs" t="Include" />
@@ -18,6 +21,7 @@
       </e>
       <e p="helpers" t="Include">
         <e p="ActionNames.cs" t="Include" />
+        <e p="DictUtils.cs" t="Include" />
         <e p="MathUtils.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
@@ -27,7 +31,7 @@
       <e p="Refactorio.csproj" t="IncludeRecursive" />
       <e p="Refactorio.sln" t="IncludeFlat" />
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_Refactorio.1487548025.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_Refactorio.1618887953.00" t="ExcludeRecursive" />
   </component>
 </project>
