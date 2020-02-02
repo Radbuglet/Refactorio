@@ -1,12 +1,12 @@
 ﻿using Godot;
 
-namespace Refactorio.game.simulation
+namespace Refactorio.game.simulation.ui
 {
     public class PauseButton : Button
     {
         private void UpdateText(SceneTree tree)
         {
-            Text = tree.Paused ? "Unpause game" : "Pause game";
+            Text = tree.Paused ? "Unpause simulation" : "Pause simulation";
         }
 
         public override void _Ready()

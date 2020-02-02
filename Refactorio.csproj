@@ -53,7 +53,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="game\CameraController.cs" />
+    <Compile Include="game\GameController.cs" />
     <Compile Include="game\scripting\Parser.cs" />
     <Compile Include="game\scripting\Runtime.cs" />
     <Compile Include="game\simulation\GameWorld.cs" />
@@ -61,7 +61,8 @@
     <Compile Include="game\simulation\objects\BaseObject.cs" />
     <Compile Include="game\simulation\objects\Machine.cs" />
     <Compile Include="game\simulation\objects\MatterCrystal.cs" />
-    <Compile Include="game\simulation\PauseButton.cs" />
+    <Compile Include="game\simulation\ui\CameraController.cs" />
+    <Compile Include="game\simulation\ui\PauseButton.cs" />
     <Compile Include="helpers\Constants.cs" />
     <Compile Include="helpers\DictUtils.cs" />
     <Compile Include="helpers\MathUtils.cs" />

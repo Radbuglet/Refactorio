@@ -6,18 +6,31 @@ namespace Refactorio.game.simulation.objects
 {
 	public class Machine : BaseObject
 	{
-		// Machine properties
-		private int _energy;
+		// Properties
 		private float _currentActionTimer;
+<<<<<<< HEAD
 		private Vector3 _lerpedTargetPos;
 		public Runtime ScriptingRuntime;
 		private Dictionary<string, bool> _movement_hooks = new Dictionary<string, bool>();
+=======
+		private float _lastMoveAngle;
+		private float _lerpedRotationAnim;
 		
-		// Action methods
+		// Machine stat properties
+		private int _energy;
+>>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
+		
+		// Utility methods
 		private void GrantEnergy(int amount)
 		{
 			_energy += amount;
 			GameWorld.IncreaseScore(amount);
+		}
+
+		protected override bool Move(Vector2 relative, out BaseObject hitNode)
+		{
+			_lastMoveAngle = relative.Angle();
+			return base.Move(relative, out hitNode);
 		}
 
 		// Event handlers
@@ -25,6 +38,7 @@ namespace Refactorio.game.simulation.objects
 		{
 			GameWorld.OnNewMachine();
 			RegisterGridPresence();
+<<<<<<< HEAD
 			_lerpedTargetPos = GridDisplayPos;
 
 			var scriptFile = new File();
@@ -42,6 +56,8 @@ namespace Refactorio.game.simulation.objects
 			ScriptingRuntime.RegisterHook("left", () => { Move(Vector2.Left); });
 			ScriptingRuntime.RegisterHook("right", () => { Move(Vector2.Right); });
 			ScriptingRuntime.RegisterHook("ping", () => { GD.Print("pong; a = " + ScriptingRuntime.GetVariable("a")); });
+=======
+>>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
 		}
 
 		public override void _ExitTree()
@@ -55,8 +71,21 @@ namespace Refactorio.game.simulation.objects
 			// Process AI
 			if (_currentActionTimer - delta <= 0)
 			{
+<<<<<<< HEAD
 				ScriptingRuntime.RunEvent("tick");
 				_currentActionTimer = 0.2f;
+=======
+				Move(MathUtils.RandDir(), out var hitNode);
+				if (hitNode is MatterCrystal crystal)
+				{
+					GrantEnergy(crystal.Damage(4));
+					_currentActionTimer = 0.5f;
+				}
+				else
+				{
+					_currentActionTimer = 0.2f;
+				}
+>>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
 			}
 			else
 			{
@@ -68,9 +97,9 @@ namespace Refactorio.game.simulation.objects
 				var moveLerpWeight = delta * 10f;
 				Translation = (Translation + GridDisplayPos * moveLerpWeight) / (1 + moveLerpWeight);
 				
-				var latentTargetLerpWeight = delta * 5f;
-				_lerpedTargetPos = (_lerpedTargetPos + GridDisplayPos * latentTargetLerpWeight) / (1 + latentTargetLerpWeight);
-				if (_lerpedTargetPos.DistanceSquaredTo(Translation) > 0.1) LookAt(_lerpedTargetPos, Vector3.Up);
+				var rotLerpWeight = delta * 5f;
+				_lerpedRotationAnim = (_lerpedRotationAnim + _lastMoveAngle * rotLerpWeight) / (1 + rotLerpWeight);
+				// Transform = Transform.Rotated(Vector3.Up, _lerpedRotationAnim);  TODO
 			}
 		}
 	}

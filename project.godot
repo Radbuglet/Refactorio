@@ -47,6 +47,6 @@ cam_right={
  ]
 }
 
-[rendering]
+[mono]
 
-environment/default_environment="res://assets/environments/default_env.tres"
+debugger_agent/port=63342

@@ -17,9 +17,9 @@ namespace Refactorio.game.simulation.objects
 			},
 			new CrystalType
 			{
-				Color=Colors.Aqua,
+				Color=Colors.Black,
 				DropCount=1,
-				Durability=100,
+				Durability=50,
 				Hardness=3
 			}
 		};
@@ -53,7 +53,7 @@ namespace Refactorio.game.simulation.objects
 				var crystalMeshCache = CrystalMesh;
 				_health = crystalTypeCache.Durability;
 
-				crystalMeshCache.MaterialOverride = new SpatialMaterial  // TODO: This strategy is painfully inefficient. Use a multi-mesh to optimize! 
+				crystalMeshCache.MaterialOverride = new SpatialMaterial 
 				{
 					AlbedoColor = crystalTypeCache.Color
 				};
@@ -72,7 +72,7 @@ namespace Refactorio.game.simulation.objects
 			_health -= finalDamage;
 			if (_health == 0)
 			{
-				QueueFree();  // TODO: Will this break if it frees immediately?
+				QueueFree();
 				UnregisterGridPresence();
 			}
 			else
