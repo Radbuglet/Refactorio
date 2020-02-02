@@ -18,6 +18,11 @@ namespace Refactorio.game.simulation.objects
 			return couldMove;
 		}
 
+		protected bool Move(Vector2 relative)
+		{
+			return Move(relative, out _);
+		}
+
 		// Event handlers
 		protected void RegisterGridPresence()
 		{

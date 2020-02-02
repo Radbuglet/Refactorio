@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using Refactorio.game.scripting;
+using Refactorio.helpers;
 
 namespace Refactorio.game.simulation.objects
 {
@@ -8,17 +9,14 @@ namespace Refactorio.game.simulation.objects
 	{
 		// Properties
 		private float _currentActionTimer;
-<<<<<<< HEAD
 		private Vector3 _lerpedTargetPos;
 		public Runtime ScriptingRuntime;
 		private Dictionary<string, bool> _movement_hooks = new Dictionary<string, bool>();
-=======
 		private float _lastMoveAngle;
 		private float _lerpedRotationAnim;
 		
 		// Machine stat properties
 		private int _energy;
->>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
 		
 		// Utility methods
 		private void GrantEnergy(int amount)
@@ -38,7 +36,6 @@ namespace Refactorio.game.simulation.objects
 		{
 			GameWorld.OnNewMachine();
 			RegisterGridPresence();
-<<<<<<< HEAD
 			_lerpedTargetPos = GridDisplayPos;
 
 			var scriptFile = new File();
@@ -56,8 +53,6 @@ namespace Refactorio.game.simulation.objects
 			ScriptingRuntime.RegisterHook("left", () => { Move(Vector2.Left); });
 			ScriptingRuntime.RegisterHook("right", () => { Move(Vector2.Right); });
 			ScriptingRuntime.RegisterHook("ping", () => { GD.Print("pong; a = " + ScriptingRuntime.GetVariable("a")); });
-=======
->>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
 		}
 
 		public override void _ExitTree()
@@ -71,10 +66,8 @@ namespace Refactorio.game.simulation.objects
 			// Process AI
 			if (_currentActionTimer - delta <= 0)
 			{
-<<<<<<< HEAD
 				ScriptingRuntime.RunEvent("tick");
 				_currentActionTimer = 0.2f;
-=======
 				Move(MathUtils.RandDir(), out var hitNode);
 				if (hitNode is MatterCrystal crystal)
 				{
@@ -85,7 +78,6 @@ namespace Refactorio.game.simulation.objects
 				{
 					_currentActionTimer = 0.2f;
 				}
->>>>>>> 06e69b0667b469d8ac7ff47719415d7a10fa498c
 			}
 			else
 			{
