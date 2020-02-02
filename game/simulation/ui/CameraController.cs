@@ -1,11 +1,11 @@
 using Godot;
 
-namespace Refactorio.game
+namespace Refactorio.game.simulation.ui
 {
     public class CameraController : Spatial
     {
         private bool _isDragging;
-        private float _zoom = 10;
+        private float _zoom = 30;
 
         private void UpdateZoom()
         {
@@ -32,7 +32,7 @@ namespace Refactorio.game
                 case InputEventMouseMotion eventMotion when _isDragging:
                 {
                     var relative = eventMotion.Relative;
-                    Translation += new Vector3(relative.x, 0, relative.y) * 0.1f;  // TODO: Adaptive move speed
+                    Translation += new Vector3(relative.x, 0, relative.y) * 0.1f;  // TODO: Adaptive move speed (scroll doesn't work on some machines)
                     break;
                 }
                 case InputEventPanGesture eventPan:
