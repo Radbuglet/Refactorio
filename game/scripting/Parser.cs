@@ -172,11 +172,7 @@ namespace Refactorio.game.scripting
 				.IgnoreAnd(ident)
 				.AndIgnore(C.Eof());
 
-			var programLines = code.Split("\n").Where(line =>
-			{
-				var trimmed = line.Trim();
-				return trimmed == "" || trimmed[0] == '#';
-			}).GetEnumerator();
+			var programLines = code.Split("\n", false);
 
 			var lineNumber = 0;
 
@@ -185,11 +181,12 @@ namespace Refactorio.game.scripting
 			
 			while (!done)
 			{
-				var line = programLines.Current;
+				var line = programLines[lineNumber];
+				GD.Print("line is " + line);
 				var nameCases = eventDeclaration.Parse(new ParseState(line, 0));
 				if (nameCases.Count != 1)
 				{
-					throw new ParseError("Line {lineNumber + 1} is invalid.");
+					throw new ParseError($"Line {lineNumber + 1} is invalid.");
 				}
 
 				var eventName = nameCases[0].Item1;
@@ -197,13 +194,19 @@ namespace Refactorio.game.scripting
 
 				while (true)
 				{
-					if (!programLines.MoveNext())
+					lineNumber++;
+					if (lineNumber >= programLines.Length)
 					{
 						done = true;
 						break;
 					}
-					lineNumber++;
-					var insLine = programLines.Current;
+					var insLine = programLines[lineNumber];
+					if (insLine == null)
+					{
+						done = true;
+						break;
+					}
+					GD.Print("insline is " + insLine);
 					var insCases = conditionalInstruction.Parse(new ParseState(insLine, 0));
 					if (insCases.Count != 1)
 					{
