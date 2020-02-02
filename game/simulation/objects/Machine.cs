@@ -11,7 +11,6 @@ namespace Refactorio.game.simulation.objects
 		private float _currentActionTimer;
 		private Vector3 _lerpedTargetPos;
 		public Runtime ScriptingRuntime;
-		private Dictionary<string, bool> _movement_hooks = new Dictionary<string, bool>();
 		private float _lastMoveAngle;
 		private float _lerpedRotationAnim;
 		
@@ -27,31 +26,24 @@ namespace Refactorio.game.simulation.objects
 
 		protected override bool Move(Vector2 relative, out BaseObject hitNode)
 		{
-			_lastMoveAngle = relative.Angle();
+			_lastMoveAngle = new Vector2(relative.x, -relative.y).Angle();
 			return base.Move(relative, out hitNode);
 		}
 
 		// Event handlers
 		public override void _Ready()
 		{
+			// Setup machine in game engine
 			GameWorld.OnNewMachine();
 			RegisterGridPresence();
 			_lerpedTargetPos = GridDisplayPos;
-
-			var scriptFile = new File();
-			scriptFile.Open("assets/script.txt", File.ModeFlags.Read);
-			ScriptingRuntime = new Runtime(Parser.Parse(scriptFile.GetAsText()));
-			scriptFile.Close();
 			
+			// Setup scripting runtime
 			ScriptingRuntime.RunEvent("init");
-			
-			GD.Print("Is this even running?");
-			
-			// Register event hooks.
-			ScriptingRuntime.RegisterHook("up", () => { Move(Vector2.Up); });
-			ScriptingRuntime.RegisterHook("down", () => { Move(Vector2.Down); });
-			ScriptingRuntime.RegisterHook("left", () => { Move(Vector2.Left); });
-			ScriptingRuntime.RegisterHook("right", () => { Move(Vector2.Right); });
+			ScriptingRuntime.RegisterHook("up", () => { Move(Vector2.Down); });
+			ScriptingRuntime.RegisterHook("down", () => { Move(Vector2.Up); });
+			ScriptingRuntime.RegisterHook("left", () => { Move(Vector2.Right); });
+			ScriptingRuntime.RegisterHook("right", () => { Move(Vector2.Left); });
 			ScriptingRuntime.RegisterHook("ping", () => { GD.Print("pong; a = " + ScriptingRuntime.GetVariable("a")); });
 		}
 
@@ -68,16 +60,6 @@ namespace Refactorio.game.simulation.objects
 			{
 				ScriptingRuntime.RunEvent("tick");
 				_currentActionTimer = 0.2f;
-				Move(MathUtils.RandDir(), out var hitNode);
-				if (hitNode is MatterCrystal crystal)
-				{
-					GrantEnergy(crystal.Damage(4));
-					_currentActionTimer = 0.5f;
-				}
-				else
-				{
-					_currentActionTimer = 0.2f;
-				}
 			}
 			else
 			{
@@ -86,12 +68,16 @@ namespace Refactorio.game.simulation.objects
 			
 			// Movement rendering
 			{
+				// Animate position
 				var moveLerpWeight = delta * 10f;
 				Translation = (Translation + GridDisplayPos * moveLerpWeight) / (1 + moveLerpWeight);
 				
-				var rotLerpWeight = delta * 5f;
+				// Animate rotation
+				var rotLerpWeight = delta * 20f;
 				_lerpedRotationAnim = (_lerpedRotationAnim + _lastMoveAngle * rotLerpWeight) / (1 + rotLerpWeight);
-				// Transform = Transform.Rotated(Vector3.Up, _lerpedRotationAnim);  TODO
+				var newRotation = Rotation;
+				newRotation.y = _lerpedRotationAnim;
+				Rotation = newRotation;
 			}
 		}
 	}

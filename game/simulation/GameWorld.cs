@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Refactorio.game.scripting;
 using Refactorio.game.simulation.objects;
@@ -18,7 +19,7 @@ namespace Refactorio.game.simulation
 		private float _animatedScore;
 		
 		// Machine construction properties
-		public Runtime MachineRuntimeTemplate;
+		public Dictionary<string, List<Runtime.ConditionalInstruction>> MachineTemplateProgram;
 		private PackedScene _machineScene;
 
 		// Getters
@@ -39,11 +40,30 @@ namespace Refactorio.game.simulation
 		{
 			_machineCount--;
 		}
+		
+		// Interaction API
+		public void SpawnMachine(Vector2 position)
+		{
+			if (GridController.GetObjectAt(position) != null)
+			{
+				GD.PushWarning("Failed to spawn machine at " + position + ".");
+				return;
+			}
+
+			var machine = (Machine) _machineScene.Instance();
+			machine.ScriptingRuntime = new Runtime(MachineTemplateProgram);
+			GameObjectsContainer.AddChild(machine);
+		}
 
 		// Event handlers
 		public override void _Ready()
 		{
+			// Spawn machine
+			// It is important to spawn the machine before the crystals so its spawn doesn't get obstructed
 			_machineScene = GD.Load<PackedScene>(Constants.PathToMachineScene);
+			SpawnMachine(Vector2.Zero);
+			
+			// Spawn crystals
 			var matterCrystalScene = GD.Load<PackedScene>(Constants.PathToCrystalScene);
 			for (var x = 0; x < 1000; x++)
 			{
@@ -69,19 +89,6 @@ namespace Refactorio.game.simulation
 			_animatedScore = (_animatedScore + _score * weight) / (1 + weight);
 			hudContainerRoot.GetNode<Label>("Score").Text = "Score:\n" + Mathf.RoundToInt(_animatedScore);
 			hudContainerRoot.GetNode<Label>("Population").Text = "Population:\n" + _machineCount;
-		}
-
-		public void SpawnMachine(Vector2 position)
-		{
-			if (GridController.GetObjectAt(position) != null)
-			{
-				GD.PushWarning("Failed to spawn machine at " + position + ".");
-				return;
-			}
-
-			var machine = (Machine)_machineScene.Instance();
-			// TODO: Setup runtime
-			GameObjectsContainer.AddChild(machine);
 		}
 
 		public void OnStopSimulationPressed()

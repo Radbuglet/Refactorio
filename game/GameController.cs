@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Godot;
+using Refactorio.game.scripting;
 using Refactorio.game.simulation;
 using Refactorio.helpers;
 
@@ -23,11 +25,22 @@ namespace Refactorio.game
 		 public void StartSimulation()
 		 {
 			 // Parse code
-			 // TODO
+			 Dictionary<string, List<Runtime.ConditionalInstruction>> parseResult; 
+			 try
+			 {
+				 var code = GetNode<TextEdit>("./CodingUi/Editor/TextEdit").Text;
+				 parseResult = Parser.Parse(code);
+			 }
+			 catch (Parser.ParseError e)
+			 {
+				 OS.Alert(e.Message, "Parse error");
+				 return;
+			 }
 			 
 			 // Spawn simulation
 			 var simulationRoot = (GameWorld) _simulationWorldScene.Instance();
 			 simulationRoot.Name = SimulationNodeName;
+			 simulationRoot.MachineTemplateProgram = parseResult;
 			 simulationRoot.Connect(nameof(GameWorld.SimulationStopped), this, nameof(StopSimulation));
 			 AddChild(simulationRoot);
 			 
@@ -38,7 +51,9 @@ namespace Refactorio.game
 		 
 		 public void StopSimulation()
 		 {
+			 // Undo potential global changes
 			 GetTree().Paused = false;
+			 Input.SetMouseMode(Input.MouseMode.Visible);
 			 
 			 // Delete simulation
 			 var world = SimulationWorld;

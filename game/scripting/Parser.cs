@@ -10,7 +10,7 @@ namespace Refactorio.game.scripting
 {
 	public static class Parser
 	{
-		class ParseError : Exception
+		public class ParseError : Exception
 		{
 			public ParseError(string msg) : base(msg) { }
 		}
