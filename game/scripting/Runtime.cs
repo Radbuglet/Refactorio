@@ -192,12 +192,18 @@ namespace Refactorio.game.scripting
         private readonly Dictionary<string, Array<ConditionalInstruction>> _events;
         private readonly Dictionary<int, int> _memory = new Dictionary<int, int>();
         private readonly Dictionary<string, int> _variables = new Dictionary<string, int>();
+        private readonly Dictionary<string, Action> _hooks = new Dictionary<string, Action>();
 
         public Runtime(Dictionary<string, Array<ConditionalInstruction>> events)
         {
             _events = events;
         }
-        
+
+        public void RegisterHook(string name, Action behavior)
+        {
+            _hooks.Add(name, behavior);
+        }
+
         private int GetVariable(string name)
         {
             return DictUtils.GetFromDict(_variables, name, 0);
@@ -222,6 +228,11 @@ namespace Refactorio.game.scripting
         {
 
             if (!_events.TryGetValue(eventName, out var body)) return;
+            if (_hooks.TryGetValue(eventName, out var behavior))
+            {
+                behavior();
+                return;
+            }
             // Don't permit recursion by forbidding calling events that are already
             // present in the call stack.
             if (_callStack.Contains(eventName)) return;
