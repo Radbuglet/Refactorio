@@ -35,21 +35,9 @@ namespace Refactorio.game
                     Translation += new Vector3(relative.x, 0, relative.y) * 0.1f;  // TODO: Adaptive move speed
                     break;
                 }
-                case InputEventMouseButton eventClick:
+                case InputEventPanGesture eventPan:
                 {
-                    float relative;
-                    switch (eventClick.ButtonIndex)
-                    {
-                        case (int) ButtonList.WheelDown:
-                            relative = 1;
-                            break;
-                        case (int) ButtonList.WheelUp:
-                            relative = -1;
-                            break;
-                        default:
-                            return;
-                    }
-                    _zoom = Mathf.Clamp(_zoom + relative, 0, 100f);
+                    _zoom = Mathf.Clamp(_zoom + eventPan.Delta.y, 0, 100f);
                     UpdateZoom();
                     break;
                 }
