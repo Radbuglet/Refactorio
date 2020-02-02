@@ -7,12 +7,12 @@ namespace Refactorio.game.simulation.objects
 	public class Machine : BaseObject
 	{
 		// Machine properties
-		public uint MachineId;
-		private uint _energy;
+		private int _energy;
 		private float _currentActionTimer;
+		private Vector3 _lerpedTargetPos;
 		
 		// Action methods
-		public void GrantEnergy(uint amount)  // TODO: indicator
+		private void GrantEnergy(int amount)
 		{
 			_energy += amount;
 			GameWorld.IncreaseScore(amount);
@@ -21,28 +21,36 @@ namespace Refactorio.game.simulation.objects
 		// Event handlers
 		public override void _Ready()
 		{
+			GameWorld.OnNewMachine();
 			RegisterGridPresence();
-			MachineId = GameWorld.RequestMachineId();
-			GameWorld.LogMachineMessage(this, "Hello world!");
+			_lerpedTargetPos = GridDisplayPos;
 		}
 
 		public override void _ExitTree()
 		{
+			GameWorld.OnMachineDied();
 			UnregisterGridPresence();
-			GameWorld.LogMachineMessage(this, "Goodbye world!");
 		}
 
 		public override void _Process(float delta)
 		{
 			// Process AI
 			if (_currentActionTimer - delta <= 0)
-			{  // Perform next action
-				Move(new Vector2(MathUtils.RandSign(), MathUtils.RandSign()));
-				_currentActionTimer = 0.2f;
-				GameWorld.IncreaseScore((uint) MathUtils.RandInt(0, 20));
+			{
+				// TODO: Sometimes, robots move out of the way in the same tick your move gets cancelled. Fix this.
+				Move(MathUtils.RandDir(), out var hitNode);
+				if (hitNode is MatterCrystal crystal)
+				{
+					GrantEnergy(crystal.Damage(4));
+					_currentActionTimer = 0.5f;
+				}
+				else
+				{
+					_currentActionTimer = 0.2f;
+				}
 			}
 			else
-			{  // Decrement timer
+			{
 				_currentActionTimer = Math.Max(_currentActionTimer - delta, 0);
 			}
 			
@@ -50,7 +58,10 @@ namespace Refactorio.game.simulation.objects
 			{
 				var moveLerpWeight = delta * 10f;
 				Translation = (Translation + GridDisplayPos * moveLerpWeight) / (1 + moveLerpWeight);
-				//if (GridDisplayPos.DistanceSquaredTo(Translation) > 0.1) LookAt(GridDisplayPos, Vector3.Up);  TODO	
+				
+				var latentTargetLerpWeight = delta * 5f;
+				_lerpedTargetPos = (_lerpedTargetPos + GridDisplayPos * latentTargetLerpWeight) / (1 + latentTargetLerpWeight);
+				if (_lerpedTargetPos.DistanceSquaredTo(Translation) > 0.1) LookAt(_lerpedTargetPos, Vector3.Up);
 			}
 		}
 	}

@@ -60,6 +60,7 @@
     <Compile Include="game\simulation\objects\BaseObject.cs" />
     <Compile Include="game\simulation\objects\Machine.cs" />
     <Compile Include="game\simulation\objects\MatterCrystal.cs" />
+    <Compile Include="game\simulation\PauseButton.cs" />
     <Compile Include="helpers\Constants.cs" />
     <Compile Include="helpers\DictUtils.cs" />
     <Compile Include="helpers\MathUtils.cs" />
@@ -67,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="game\Game.tscn" />
-    <Content Include="game\simulation\objects\Machine.tscn" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

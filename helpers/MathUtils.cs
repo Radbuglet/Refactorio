@@ -16,7 +16,14 @@ namespace Refactorio.helpers
 
         public static int RandInt(int min, int max)
         {
-            return (int) GD.RandRange(min, max);
+            return Mathf.RoundToInt((float) GD.RandRange(min, max));
+        }
+        
+        public static Vector2 RandDir()
+        {
+            var num = RandInt(0, 3);
+            var sign = num > 1 ? 1 : -1;
+            return new Vector2(num % 2 == 0 ? 1 : 0, num % 2 != 0 ? 1 : 0) * sign;
         }
     }
 }

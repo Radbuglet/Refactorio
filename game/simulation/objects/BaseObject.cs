@@ -11,9 +11,16 @@ namespace Refactorio.game.simulation.objects
 		// Utils
 		protected GameWorld GameWorld => GetNode<GameWorld>("../../");
 		
-		protected void Move(Vector2 relative)
+		protected bool Move(Vector2 relative, out BaseObject hitNode)
 		{
-			GameWorld.GridController.MoveObject(this, relative);
+			var couldMove = GameWorld.GridController.MoveObject(this, relative, out var theHitNode);
+			hitNode = theHitNode;
+			return couldMove;
+		}
+		
+		protected bool Move(Vector2 relative)
+		{
+			return GameWorld.GridController.MoveObject(this, relative);
 		}
 		
 		// Event handlers

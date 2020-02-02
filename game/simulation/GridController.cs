@@ -30,7 +30,7 @@ namespace Refactorio.game.simulation
 
         private Vector3 GridDeltaToRealDelta(Vector2 delta)
         {
-            return new Vector3(delta.x, 0, delta.y) * _offset;
+            return new Vector3(delta.x, 0, delta.y) * _scale;
         }
         
         // Containment API
@@ -47,14 +47,21 @@ namespace Refactorio.game.simulation
             _posToObjMap.Remove(obj.GridPos);
         }
 
-        public bool MoveObject(TContainedNode obj, Vector2 relative)
+        public bool MoveObject(TContainedNode obj, Vector2 relative, out TContainedNode hitNode)
         {
-            if (GetObjectAt(obj.GridPos + relative) != null) return false;
+            hitNode = GetObjectAt(obj.GridPos + relative);
+            if (hitNode != null) return false;
+            
             _posToObjMap.Remove(obj.GridPos);
             obj.GridDisplayPos += GridDeltaToRealDelta(relative);
             obj.GridPos += relative;
             _posToObjMap.Add(obj.GridPos, obj);
             return true;
+        }
+
+        public bool MoveObject(TContainedNode obj, Vector2 relative)
+        {
+            return MoveObject(obj, relative, out _);
         }
 
         public TContainedNode GetObjectAt(Vector2 pos)

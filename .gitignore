@@ -9,3 +9,4 @@ data_*/
 
 # Misc
 .DS_Store
+*.user
