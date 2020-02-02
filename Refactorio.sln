@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactorio", "Refactorio.csproj", "{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactorio", "Refactorio.csproj", "{86F5CCE5-439D-4B7F-B173-AA438DB3515B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,11 +9,11 @@ Global
 	Tools|Any CPU = Tools|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
-		{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}.Tools|Any CPU.Build.0 = Tools|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
+		{86F5CCE5-439D-4B7F-B173-AA438DB3515B}.Tools|Any CPU.Build.0 = Tools|Any CPU
 	EndGlobalSection
 EndGlobal
