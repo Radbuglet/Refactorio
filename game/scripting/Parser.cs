@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security.Policy;
+using Godot;
 using Refactorio.helpers;
 
 using C = Refactorio.helpers.Combinators;
@@ -22,11 +24,6 @@ namespace Refactorio.game.scripting
 			C.Expect(c => c == ' ' || c == '\t')
 				.Repeat()
 				.Map(_ => true);
-		
-		private static readonly IParser<bool> BlankLines =
-			C.Expect("\n").And(
-				Whitespace.And(C.Expect("\n")).Repeat())
-				.Map(_ => true).Or(C.Eof());
 
 		private static IParser<Rt.IExpression> Unary(
 			string name,
@@ -160,52 +157,65 @@ namespace Refactorio.game.scripting
 					C.Expect(")").And(Whitespace))
 				.Or(C.Pure<Rt.IExpression>(null));
 
-			var conditionalInstructionLine = C.Expect(" ")
-				.AndIgnore(Whitespace)
+			var conditionalInstruction = Whitespace
 				.IgnoreAnd(conditional)
 				.And(instruction)
-				.AndIgnore(BlankLines)
+				.AndIgnore(C.Eof())
 				.Map(v => new Rt.ConditionalInstruction
 				{
 					Condition = v.Item1,
 					Instruction = v.Item2,
 				});
-			
-			var program = ident
-				.AndIgnore(Whitespace)
-				.AndIgnore(BlankLines)
-				.And(conditionalInstructionLine.Repeat())
-				.Repeat()
-				.AndIgnore(C.Eof());
-			
-			var initState = new ParseState(code, 0);
-			var cases = program.Parse(initState);
-			var numCases = cases.Count;
-			
-			if (numCases == 0)
-			{
-				throw new ParseError("Couldn't parse the code.");
-			}
 
-			if (numCases > 1)
+			var eventDeclaration = C.Expect(":")
+				.And(Whitespace)
+				.IgnoreAnd(ident)
+				.AndIgnore(C.Eof());
+
+			var programLines = code.Split("\n").Where(line =>
 			{
-				throw new ParseError($"Could parse in {numCases} ways.");
-			}
-			
+				var trimmed = line.Trim();
+				return trimmed == "" || trimmed[0] == '#';
+			}).GetEnumerator();
+
+			var lineNumber = 0;
+
+			var done = false;
 			var events = new Dictionary<string, List<Runtime.ConditionalInstruction>>();
 			
-			foreach (var (eventName, body) in cases[0].Item1)
+			while (!done)
 			{
-				if (events.ContainsKey(eventName))
+				var line = programLines.Current;
+				var nameCases = eventDeclaration.Parse(new ParseState(line, 0));
+				if (nameCases.Count != 1)
 				{
-					throw new ParseError($"Event {eventName} is declared multiple times.");
+					throw new ParseError("Line {lineNumber + 1} is invalid.");
 				}
-				else
-				{
-					events.Add(eventName, body);
-				}
-			}
 
+				var eventName = nameCases[0].Item1;
+				var eventBody = new List<Rt.ConditionalInstruction>();
+
+				while (true)
+				{
+					if (!programLines.MoveNext())
+					{
+						done = true;
+						break;
+					}
+					lineNumber++;
+					var insLine = programLines.Current;
+					var insCases = conditionalInstruction.Parse(new ParseState(insLine, 0));
+					if (insCases.Count != 1)
+					{
+						break;
+					}
+
+					eventBody.Add(insCases[0].Item1);
+				}
+				
+				events.Add(eventName, eventBody);
+			}
+			
 			return events;
 		}
 	}
