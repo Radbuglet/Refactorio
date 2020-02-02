@@ -6,16 +6,25 @@ namespace Refactorio.game.simulation.objects
 {
 	public class Machine : BaseObject
 	{
-		// Machine properties
-		private int _energy;
+		// Properties
 		private float _currentActionTimer;
-		private Vector3 _lerpedTargetPos;
+		private float _lastMoveAngle;
+		private float _lerpedRotationAnim;
 		
-		// Action methods
+		// Machine stat properties
+		private int _energy;
+		
+		// Utility methods
 		private void GrantEnergy(int amount)
 		{
 			_energy += amount;
 			GameWorld.IncreaseScore(amount);
+		}
+
+		protected override bool Move(Vector2 relative, out BaseObject hitNode)
+		{
+			_lastMoveAngle = relative.Angle();
+			return base.Move(relative, out hitNode);
 		}
 
 		// Event handlers
@@ -23,7 +32,6 @@ namespace Refactorio.game.simulation.objects
 		{
 			GameWorld.OnNewMachine();
 			RegisterGridPresence();
-			_lerpedTargetPos = GridDisplayPos;
 		}
 
 		public override void _ExitTree()
@@ -37,7 +45,6 @@ namespace Refactorio.game.simulation.objects
 			// Process AI
 			if (_currentActionTimer - delta <= 0)
 			{
-				// TODO: Sometimes, robots move out of the way in the same tick your move gets cancelled. Fix this.
 				Move(MathUtils.RandDir(), out var hitNode);
 				if (hitNode is MatterCrystal crystal)
 				{
@@ -59,9 +66,9 @@ namespace Refactorio.game.simulation.objects
 				var moveLerpWeight = delta * 10f;
 				Translation = (Translation + GridDisplayPos * moveLerpWeight) / (1 + moveLerpWeight);
 				
-				var latentTargetLerpWeight = delta * 5f;
-				_lerpedTargetPos = (_lerpedTargetPos + GridDisplayPos * latentTargetLerpWeight) / (1 + latentTargetLerpWeight);
-				if (_lerpedTargetPos.DistanceSquaredTo(Translation) > 0.1) LookAt(_lerpedTargetPos, Vector3.Up);
+				var rotLerpWeight = delta * 5f;
+				_lerpedRotationAnim = (_lerpedRotationAnim + _lastMoveAngle * rotLerpWeight) / (1 + rotLerpWeight);
+				// Transform = Transform.Rotated(Vector3.Up, _lerpedRotationAnim);  TODO
 			}
 		}
 	}

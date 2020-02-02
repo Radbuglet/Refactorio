@@ -17,9 +17,9 @@ namespace Refactorio.game.simulation.objects
 			},
 			new CrystalType
 			{
-				Color=Colors.Aqua,
+				Color=Colors.Black,
 				DropCount=1,
-				Durability=100,
+				Durability=50,
 				Hardness=3
 			}
 		};

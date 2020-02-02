@@ -59,11 +59,6 @@ namespace Refactorio.game.simulation
             return true;
         }
 
-        public bool MoveObject(TContainedNode obj, Vector2 relative)
-        {
-            return MoveObject(obj, relative, out _);
-        }
-
         public TContainedNode GetObjectAt(Vector2 pos)
         {
             return DictUtils.GetFromDict(_posToObjMap, pos, null);
