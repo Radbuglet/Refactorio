@@ -172,7 +172,11 @@ namespace Refactorio.game.scripting
 				.IgnoreAnd(ident)
 				.AndIgnore(C.Eof());
 
-			var programLines = code.Split("\n", false);
+			var programLines = code.Split("\n", false).Where(line =>
+			{
+				var trimmed = line.Trim();
+				return !(trimmed == "" || trimmed[0] == '#');
+			}).ToArray();
 
 			var lineNumber = 0;
 
