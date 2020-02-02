@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="game\CameraController.cs" />
+    <Compile Include="game\scripting\Parser.cs" />
     <Compile Include="game\scripting\Runtime.cs" />
     <Compile Include="game\simulation\GameWorld.cs" />
     <Compile Include="game\simulation\GridController.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="helpers\Constants.cs" />
     <Compile Include="helpers\DictUtils.cs" />
     <Compile Include="helpers\MathUtils.cs" />
+    <Compile Include="helpers\ParserCombinators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,10 +7,32 @@ namespace Refactorio.game.scripting
 {
     public class Runtime
     {
+        public enum BinaryOperator
+        {
+            Add,
+            Sub,
+            Mul,
+            Div,
+            Mod,
+            Gt,
+            Lt,
+            Eq,
+            And,
+            Or
+        }
+
+        public enum UnaryOperator
+        {
+            Abs,
+            Minus,
+            Not
+        }
+
         public interface IExpression
         {
             int Evaluate(Runtime runtime);
         }
+
         public interface IReferentialExpression : IExpression
         {
             void Assign(Runtime runtime, int value);
@@ -18,61 +40,55 @@ namespace Refactorio.game.scripting
 
         public class LiteralExpression : IExpression
         {
-            public int value;
+            public int Value;
 
             public int Evaluate(Runtime runtime)
             {
-                return value;
+                return Value;
             }
         }
 
         public class IndexExpression : IReferentialExpression
         {
-            public IExpression index;
+            public IExpression Index;
+
             public int Evaluate(Runtime runtime)
             {
-                var idx = index.Evaluate(runtime);
+                var idx = Index.Evaluate(runtime);
                 return runtime.GetMemory(idx);
             }
 
             public void Assign(Runtime runtime, int value)
             {
-                var idx = index.Evaluate(runtime);
+                var idx = Index.Evaluate(runtime);
                 runtime.SetMemory(idx, value);
             }
         }
 
         public class VariableExpression : IReferentialExpression
         {
-            public string name;
-            
+            public string Name;
+
             public int Evaluate(Runtime runtime)
             {
-                return runtime.GetVariable(name);
+                return runtime.GetVariable(Name);
             }
 
             public void Assign(Runtime runtime, int value)
             {
-                runtime.SetVariable(name, value);
+                runtime.SetVariable(Name, value);
             }
-        }
-
-        public enum UnaryOperator
-        {
-            Abs,
-            Minus,
-            Not,
         }
 
         public class UnaryExpression : IExpression
         {
-            public IExpression inner;
-            public UnaryOperator op;
+            public IExpression Inner;
+            public UnaryOperator Op;
 
             public int Evaluate(Runtime runtime)
             {
-                var a = inner.Evaluate(runtime);
-                switch (op)
+                var a = Inner.Evaluate(runtime);
+                switch (Op)
                 {
                     case UnaryOperator.Abs:
                         return Math.Abs(a);
@@ -86,40 +102,32 @@ namespace Refactorio.game.scripting
             }
         }
 
-        public enum BinaryOperator
-        {
-            Plus,
-            Minus,
-            Times,
-            Div,
-            Mod,
-            Eq,
-            And,
-            Or,
-        }
-
         public class BinaryExpression : IExpression
         {
-            public IExpression left;
-            public IExpression right;
-            public BinaryOperator op;
+            public IExpression Left;
+            public BinaryOperator Op;
+            public IExpression Right;
 
             public int Evaluate(Runtime runtime)
             {
-                var a = left.Evaluate(runtime);
-                var b = right.Evaluate(runtime);
-                switch (op)
+                var a = Left.Evaluate(runtime);
+                var b = Right.Evaluate(runtime);
+                switch (Op)
                 {
-                    case BinaryOperator.Plus:
+                    case BinaryOperator.Add:
                         return a + b;
-                    case BinaryOperator.Minus:
+                    case BinaryOperator.Sub:
                         return a - b;
-                    case BinaryOperator.Times:
+                    case BinaryOperator.Mul:
                         return a * b;
                     case BinaryOperator.Div:
                         return b == 0 ? 0 : a / b;
                     case BinaryOperator.Mod:
                         return b == 0 ? 0 : a % b;
+                    case BinaryOperator.Gt:
+                        return a > b ? 1 : 0;
+                    case BinaryOperator.Lt:
+                        return a < b ? 1 : 0;
                     case BinaryOperator.Eq:
                         return a == b ? 1 : 0;
                     case BinaryOperator.And:
@@ -136,99 +144,90 @@ namespace Refactorio.game.scripting
         {
             void Execute(Runtime runtime);
         }
+
         public class AssignmentInstruction : IInstruction
         {
-            private IExpression source;
-            private IReferentialExpression destination;
+            public IReferentialExpression Destination;
+            public IExpression Source;
 
             public void Execute(Runtime runtime)
             {
-                destination.Assign(runtime, source.Evaluate(runtime));
+                Destination.Assign(runtime, Source.Evaluate(runtime));
             }
         }
 
         public class EventInstruction : IInstruction
         {
-            public string eventName;
+            public string EventName;
+
             public void Execute(Runtime runtime)
             {
-                runtime.RunEvent(eventName);
+                runtime.RunEvent(EventName);
             }
         }
+
         public class Condition
         {
-            public bool checksZero;
-            public string variable;
+            public bool ChecksZero;
+            public string Variable;
 
             public bool IsMet(Runtime runtime)
             {
-                if (checksZero)
-                {
-                    return runtime.GetVariable(variable) == 0;
-                }
-                else
-                {
-                    return runtime.GetVariable(variable) != 0;
-                }
+                return ChecksZero ? runtime.GetVariable(Variable) == 0 : runtime.GetVariable(Variable) != 0;
             }
         }
+
         public class ConditionalInstruction
         {
-            public Array<Condition> conditions;
-            public IInstruction instruction;
+            public Array<Condition> Conditions;
+            public IInstruction Instruction;
 
             public void Execute(Runtime runtime)
             {
-                if (conditions.All(condition => condition.IsMet(runtime)))
-                {
-                    instruction.Execute(runtime);
-                }
+                if (Conditions.All(condition => condition.IsMet(runtime))) Instruction.Execute(runtime);
             }
         }
         
-        public Dictionary<string, int> variables;
-        public Dictionary<int, int> memory;
-        public Dictionary<string, Array<ConditionalInstruction>> events;
-        public Dictionary<string, bool> flags;
-        public Array<string> callStack;
+        private readonly Array<string> _callStack = new Array<string>();
+        private readonly Dictionary<string, Array<ConditionalInstruction>> _events;
+        private readonly Dictionary<int, int> _memory = new Dictionary<int, int>();
+        private readonly Dictionary<string, int> _variables = new Dictionary<string, int>();
 
+        public Runtime(Dictionary<string, Array<ConditionalInstruction>> events)
+        {
+            _events = events;
+        }
+        
         private int GetVariable(string name)
         {
-            return DictUtils.GetFromDict(variables, name, 0);
+            return DictUtils.GetFromDict(_variables, name, 0);
         }
 
         private void SetVariable(string name, int value)
         {
-            variables.Add(name, value);
+            _variables.Add(name, value);
         }
 
         private int GetMemory(int index)
         {
-            return DictUtils.GetFromDict(memory, index, 0);
+            return DictUtils.GetFromDict(_memory, index, 0);
         }
 
         private void SetMemory(int index, int value)
         {
-            memory.Add(index, value);
+            _memory.Add(index, value);
         }
 
         public void RunEvent(string eventName)
         {
-            if (flags.ContainsKey(eventName))
-            {
-                flags.Add(eventName, true);
-                return;
-            }
-            if (!events.TryGetValue(eventName, out var body)) return;
+
+            if (!_events.TryGetValue(eventName, out var body)) return;
             // Don't permit recursion by forbidding calling events that are already
             // present in the call stack.
-            if (callStack.Contains(eventName)) return;
-            callStack.Add(eventName);
-            foreach (var instruction in body)
-            {
-                instruction.Execute(this);
-            }
-            callStack.Resize(callStack.Count - 1);
+            if (_callStack.Contains(eventName)) return;
+            _callStack.Add(eventName);
+            foreach (var instruction in body) instruction.Execute(this);
+            _callStack.Resize(_callStack.Count - 1);
         }
     }
 }
