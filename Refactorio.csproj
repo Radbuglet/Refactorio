@@ -54,12 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="game\CameraController.cs" />
+    <Compile Include="game\scripting\Parser.cs" />
     <Compile Include="game\scripting\Runtime.cs" />
     <Compile Include="game\simulation\Machine.cs" />
     <Compile Include="game\simulation\World.cs" />
     <Compile Include="helpers\ActionNames.cs" />
     <Compile Include="helpers\DictUtils.cs" />
     <Compile Include="helpers\MathUtils.cs" />
+    <Compile Include="helpers\ParserCombinators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

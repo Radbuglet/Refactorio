@@ -12,6 +12,7 @@
       <e p="game" t="Include">
         <e p="CameraController.cs" t="Include" />
         <e p="scripting" t="Include">
+          <e p="Parser.cs" t="Include" />
           <e p="Runtime.cs" t="Include" />
         </e>
         <e p="simulation" t="Include">
@@ -23,6 +24,7 @@
         <e p="ActionNames.cs" t="Include" />
         <e p="DictUtils.cs" t="Include" />
         <e p="MathUtils.cs" t="Include" />
+        <e p="ParserCombinators.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="Properties" t="Include">
