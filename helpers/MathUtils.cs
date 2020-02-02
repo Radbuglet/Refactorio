@@ -13,5 +13,10 @@ namespace Refactorio.helpers
         {
             return new Vector2(vec.x, vec.z);
         }
+
+        public static int RandInt(int min, int max)
+        {
+            return (int) GD.RandRange(min, max);
+        }
     }
 }

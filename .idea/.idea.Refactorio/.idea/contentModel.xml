@@ -4,24 +4,25 @@
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p=".mono/temp/bin" t="ExcludeRecursive" />
       <e p=".mono/temp/obj" t="ExcludeRecursive" />
-      <e p="assets" t="Include">
-        <e p="default_env.tres" t="Include" />
-        <e p="icon.png" t="Include" />
-        <e p="icon.png.import" t="Include" />
-      </e>
       <e p="game" t="Include">
         <e p="CameraController.cs" t="Include" />
+        <e p="Game.tscn" t="Include" />
         <e p="scripting" t="Include">
           <e p="Runtime.cs" t="Include" />
         </e>
         <e p="simulation" t="Include">
           <e p="GameWorld.cs" t="Include" />
           <e p="GridController.cs" t="Include" />
-          <e p="Machine.cs" t="Include" />
+          <e p="objects" t="Include">
+            <e p="BaseObject.cs" t="Include" />
+            <e p="Machine.cs" t="Include" />
+            <e p="Machine.tscn" t="Include" />
+            <e p="MatterCrystal.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="helpers" t="Include">
-        <e p="ActionNames.cs" t="Include" />
+        <e p="Constants.cs" t="Include" />
         <e p="DictUtils.cs" t="Include" />
         <e p="MathUtils.cs" t="Include" />
       </e>

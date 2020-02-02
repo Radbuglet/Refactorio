@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DA6DF57B-B71A-4208-8F41-0BE8B72BAAEC}</ProjectGuid>
+    <ProjectGuid>{86F5CCE5-439D-4B7F-B173-AA438DB3515B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
     <RootNamespace>Refactorio</RootNamespace>
@@ -57,16 +57,17 @@
     <Compile Include="game\scripting\Runtime.cs" />
     <Compile Include="game\simulation\GameWorld.cs" />
     <Compile Include="game\simulation\GridController.cs" />
-    <Compile Include="game\simulation\Machine.cs" />
-    <Compile Include="helpers\ActionNames.cs" />
+    <Compile Include="game\simulation\objects\BaseObject.cs" />
+    <Compile Include="game\simulation\objects\Machine.cs" />
+    <Compile Include="game\simulation\objects\MatterCrystal.cs" />
+    <Compile Include="helpers\Constants.cs" />
     <Compile Include="helpers\DictUtils.cs" />
     <Compile Include="helpers\MathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\default_env.tres" />
-    <Content Include="assets\icon.png" />
-    <Content Include="assets\icon.png.import" />
+    <Content Include="game\Game.tscn" />
+    <Content Include="game\simulation\objects\Machine.tscn" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
